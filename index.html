@@ -18,7 +18,7 @@
       gap: 16px;
     }
 
-    h1 { font-size: 2.5rem; color: #1B5E20; text-shadow: 2px 2px 0 rgba(0,0,0,.12); }
+    h1 { font-size: clamp(1.4rem, 7vw, 2.5rem); color: #1B5E20; text-shadow: 2px 2px 0 rgba(0,0,0,.12); }
 
     .wrapper {
       display: flex;
@@ -45,7 +45,7 @@
     .pbar-track { width: 100%; height: 18px; background: #e0e0e0; border-radius: 99px; overflow: hidden; }
     .pbar-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#81C784,#2E7D32); width: 0%; transition: width .45s ease; }
 
-    .problem { font-size: 3rem; font-weight: bold; color: #1B5E20; letter-spacing: 6px; text-align: center; }
+    .problem { font-size: clamp(1.8rem, 8vw, 3rem); font-weight: bold; color: #1B5E20; letter-spacing: clamp(2px, 2vw, 6px); text-align: center; }
 
     .answer-row { display: flex; gap: 12px; align-items: center; }
 
@@ -207,6 +207,32 @@
       from { transform: scale(1);    opacity: 1; }
       to   { transform: scale(1.06); opacity: .88; }
     }
+    /* â”€â”€ Mobile / responsive layout â”€â”€ */
+    @media (max-width: 640px) {
+      body     { padding: 12px 10px 24px; gap: 10px; }
+
+      /* Stack cards: dino on top, math in middle */
+      .wrapper { flex-direction: column; gap: 14px; align-items: stretch; }
+      .wrapper > .card:first-child { order: 2; }
+      .wrapper > .card:last-child  { order: 1; }
+
+      /* Tighter card padding, reduced bottom whitespace */
+      .card    { padding: 18px 14px 8px; gap: 8px; }
+      .tip     { display: none; }
+
+      /* Let dino photo fill the full card width */
+      .dino-stage { max-width: 100%; }
+
+      /* Level buttons wrap on narrow screens */
+      #level-row { flex-wrap: wrap; justify-content: center; gap: 8px; }
+      .level-btn  { padding: 6px 18px; font-size: .88rem; }
+
+      /* Slightly smaller volcano border-radius */
+      #volcano-wrap { border-radius: 12px; }
+
+      /* Tighten game-over text spacing */
+      .gameover-text { letter-spacing: 2px; }
+    }
   </style>
 </head>
 <body>
@@ -228,7 +254,7 @@
     <div class="pbar-track"><div class="pbar-fill" id="pbar"></div></div>
     <div class="problem" id="problem">Loading...</div>
     <div class="answer-row">
-      <input id="inp" type="number" min="1" max="19" placeholder="?" autocomplete="off">
+      <input id="inp" type="number" min="1" max="19" placeholder="?" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
       <button class="btn" id="check-btn">Check!</button>
     </div>
     <div class="feedback" id="fb"></div>
@@ -530,5 +556,3 @@
 
 </body>
 </html>
-
-

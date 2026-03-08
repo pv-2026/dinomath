@@ -390,16 +390,23 @@
     return { a, b, ans: a - b, op: '-' };
   }
   function buildQueue() {
+    const used = [];
+    function uniq(maker) {
+      let p, tries = 0;
+      do { p = maker(); tries++; } while (tries < 50 && used.some(u => u.a === p.a && u.b === p.b && u.op === p.op));
+      used.push(p);
+      return p;
+    }
     let problems;
     if (level === 'easy') {
-      problems = [makeAdditionEasy(), makeAdditionEasy(), makeAdditionEasy(),
-                  makeAdditionEasy(), makeAdditionEasy()];
+      problems = [uniq(makeAdditionEasy), uniq(makeAdditionEasy), uniq(makeAdditionEasy),
+                  uniq(makeAdditionEasy), uniq(makeAdditionEasy)];
     } else if (level === 'medium') {
-      problems = [makeAdditionMed(), makeAdditionMed(), makeAdditionMed(),
-                  makeSubtractionMed(), makeSubtractionMed()];
+      problems = [uniq(makeAdditionMed), uniq(makeAdditionMed), uniq(makeAdditionMed),
+                  uniq(makeSubtractionMed), uniq(makeSubtractionMed)];
     } else {
-      problems = [makeAdditionHard(), makeAdditionHard(), makeAdditionHard(),
-                  makeSubtractionHard(), makeSubtractionHard()];
+      problems = [uniq(makeAdditionHard), uniq(makeAdditionHard), uniq(makeAdditionHard),
+                  uniq(makeSubtractionHard), uniq(makeSubtractionHard)];
     }
     for (let i = problems.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -414,6 +421,7 @@
     const inp = $('inp');
     inp.value = '';
     inp.disabled = false;
+    $('check-btn').disabled = false;
     inp.focus();
     setFeedback('', '');
   }
@@ -499,6 +507,9 @@
         $('check-btn').disabled = true;
         inp.disabled = true;
       } else {
+        $('check-btn').disabled = true;
+        inp.value = '';
+        inp.focus();
         setTimeout(showProblem, 1100);
       }
     } else {
